@@ -125,9 +125,9 @@ export const registroUsuario = asyncHandler(async (req, res) => {
   }
 
     // Se verifica que no haya un usuario con ese documento
-    busquedaUsuario = await Usuario.findOne({ documento })
+    const busquedaDocumento = await Usuario.findOne({ documento })
 
-    if (busquedaUsuario) {
+    if (busquedaDocumento) {
       return res.status(400).json({
         ok: false,
         mensaje: 'El Documento ya se encuentra Registrado'

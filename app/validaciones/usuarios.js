@@ -56,12 +56,6 @@ export const validarRegistro = [
     .notEmpty()
     .isLength({ min: 2 })
     .withMessage('Los Apellidos no puede ser menor a 2 caracteres'),
-  //ROLES
-  // Que roles exista, no se encuentre vacio y que sea un array
-  check('roles', 'El rol del usuario es Requerido')
-    .exists()
-    .notEmpty()
-    .isArray(),
 
   (req, res, next) => {
     validacionErrores(req, res, next);
