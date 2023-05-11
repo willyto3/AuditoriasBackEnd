@@ -18,7 +18,7 @@ import fileDirName from '../../configuracion/file-dir-name.js'
 
 //? CONFIGURACIONES
 
-//! Se declara el archivo y el nombre
+// Se declara el archivo y el nombre
 const { __dirname, __filename } = fileDirName(import.meta)
 
 // Funcion para crear un evento

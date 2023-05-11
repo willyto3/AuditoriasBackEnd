@@ -34,13 +34,13 @@ router.get('/:id', obtenerUnUsuario);
 router.delete('/', eliminarUsuario);
 
 // Rutas de Escritura
-// router.post(
-//   "/registrousuario",
-//   validarRegistro,
-//   upload.single("picture"),
-//   registroUsuario
-// );
-router.post('/registrousuario', upload.single('picture'), registroUsuario);
+router.post(
+  '/registrousuario',
+  validarRegistro,
+  upload.single('picture'),
+  registroUsuario
+);
+
 router.post('/ingresousuario', ingresoUsuario);
 
 // // Rutas de Actualización
