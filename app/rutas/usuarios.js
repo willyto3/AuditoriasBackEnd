@@ -36,7 +36,6 @@ router.delete('/', eliminarUsuario);
 // Rutas de Escritura
 router.post(
   '/registrousuario',
-  validarRegistro,
   upload.single('picture'),
   registroUsuario
 );
