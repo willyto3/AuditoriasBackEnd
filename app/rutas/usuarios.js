@@ -31,7 +31,7 @@ router.get('/:id', obtenerUnUsuario);
 // router.get('/:id', verificarToken,obtenerUnUsuario)
 
 // Rutas de Eliminación
-router.delete('/', eliminarUsuario);
+router.delete('/:id', eliminarUsuario);
 
 // Rutas de Escritura
 router.post(

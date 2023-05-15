@@ -34,16 +34,17 @@ export const obtenerTodosLosUsuarios = asyncHandler(async (req, res) => {
 // @Acceso Privado
 export const obtenerUnUsuario = asyncHandler(async (req, res) => {
   // Se extrae el id de los parametros
-  const { id } = req.params
+  const { id: _id } = req.params
 
   // Se realiza la busqueda del id en User
-  const usuario = await Usuario.findById(id)
+  const usuario = await Usuario.findById(_id)
   // Si el usuario esta vacio, muestra un mensaje de error
   if (!usuario) {
     return res.status(400).json({ ok: false, message: 'Usuario no encontrado' })
   }
   // Respuesta del usuario encontrado
-  res.status(200).json(usuario)
+  console.log(usuario)
+  res.json(usuario)
 })
 
 // INGRESO USUARIO
@@ -174,7 +175,7 @@ export const registroUsuario = asyncHandler(async (req, res) => {
 // @Acceso Privado
 export const eliminarUsuario = asyncHandler(async (req, res) => {
   // Se extrae el id de los parametros
-  const { _id } = req.body
+  const { id: _id } = req.params
 
   if (!_id) {
     return res.status(400).json({ message: 'Se requiere el ID del Usuario' })
