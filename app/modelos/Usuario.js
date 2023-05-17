@@ -35,6 +35,15 @@ const UsuarioEsquema = new mongoose.Schema(
     picturePath: {
       type: String,
       default: ''
+    },
+    rol: {
+      type: String,
+      enum: [ 'usuario','administrador', 'Super Administrador'],
+      default: 'usuario'
+    },
+    estaActivo: {
+      type: Boolean,
+      default: true
     }
   },
   {

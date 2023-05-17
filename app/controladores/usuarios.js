@@ -10,11 +10,42 @@ import asyncHandler from 'express-async-handler'
 // Importacón del Modelo User
 import Usuario from '../modelos/Usuario.js'
 
-// OBTENER USUARIOS
+//? OBTENER USUARIOS
 // @Descripcion obtener todos los usuarios
 // @route Get /usuarios
 // @Acceso Privado
 export const obtenerTodosLosUsuarios = asyncHandler(async (req, res) => {
+
+  // Se añade poder enviar por req.query, metodos para filtar resultados y ordenar resultados
+  const { nombres, sort, select } = req.query
+  const queryObject = {}
+
+    // Busqueda por Nombres
+  if (nombres) {
+    queryObject.nombres = nombres
+  }
+
+  // Se buscan todos los usuarios, pero no se solicita la informacion del password
+  let usersData = Usuario.find(queryObject)
+
+  // Se ordena por eleccion del usuario
+  if (sort) {
+    let sortFix = sort.replace(',', ' ')
+    usersData = usersData.sort(sortFix)
+  }
+
+  // Para retornar unicamente los datos necesarios de los usuarios
+  if (select) {
+    let selectFix = select.split(',').join(' ')
+    usersData = usersData.select(selectFix)
+  }
+
+  // Para añadir paginacion a la busqueda
+  let page = Number(req.query.page) || 1
+  let limit = Number(req.query.limit) || 10
+  let skip = (page - 1) * limit
+  usersData = usersData.skip(skip).limit(limit)
+
   // Se buscan todos los usuarios, pero no se solicita la informacion del password
   const usuarios = await Usuario.find().select('-contrasena').lean()
 
@@ -47,7 +78,7 @@ export const obtenerUnUsuario = asyncHandler(async (req, res) => {
   res.json(usuario)
 })
 
-// INGRESO USUARIO
+//? INGRESO USUARIO
 // @Descripción Hacer Login en la APP
 // @route Post usuarios/ingresousuario
 // @Acceso Publico
@@ -99,9 +130,9 @@ export const ingresoUsuario = asyncHandler(async (req, res) => {
   )
 })
 
-// REGISTRAR USUARIO
+//? REGISTRAR USUARIO
 // @Descripción Crear un nuevo usuario
-// @route Post usuarios/registrarusuario
+// @route Post usuarios
 // @Acceso Privado
 export const registroUsuario = asyncHandler(async (req, res) => {
   // Se solicitan los datos de la pagina
@@ -167,12 +198,13 @@ export const registroUsuario = asyncHandler(async (req, res) => {
   })
 })
 
-// ELIMINAR USUARIO
+//? ELIMINAR USUARIO
+
+// @Descripcion Eliminar un usuario
+// @route delete /usuarios/:id
+// @Acceso Privado
 //! Hay que pensar si se debe eliminar un usuario
 //! HE PENSADO QUE SE ELIMINE SI NO HA REALIZADO AUDITORIAS
-// @Descripcion Eliminar un usuario
-// @route delete /usuarios
-// @Acceso Privado
 export const eliminarUsuario = asyncHandler(async (req, res) => {
   // Se extrae el id de los parametros
   const { id: _id } = req.params
@@ -200,4 +232,63 @@ export const eliminarUsuario = asyncHandler(async (req, res) => {
 
   const reply = `Se elimino el usuario ${result.nombres} ${result.apellidos}.`
   res.json(reply)
+})
+
+//? UPDATE USER
+// @Descripcion Actualizar un Usuario
+// @route Patch /usuarios/:id
+// @Acceso Privado
+export const actualizarUsuario = asyncHandler(async (req, res) => {
+  // Se extrae el id de los parametros
+  const { id: _id } = req.params
+  // Se solicitan los datos de la pagina
+  const {
+    nombres,
+    apellidos,
+    documento,
+    email,
+    cargo,
+    picturePath,
+    rol,
+    estaActivo
+  } = req.body
+
+  // se verifica que exista un id de un usuario
+  if (!_id) {
+    return res.status(400).json({
+      ok: false,
+      message: 'Se Necesita el ID del usuario a actualizar'
+    })
+  }
+
+  // Se realiza la busqueda por el id del usuario
+  const usuario = await Usuario.findById(_id).select('-contrasena').exec()
+
+  // Se verifica que el usuario exista
+  if (!usuario) {
+    return res.status(400).json({ ok: false, message: 'Usuario no encontrado' })
+  }
+
+  //Check for duplicate
+  const duplicate = await Usuario.findOne({ documento }).lean().exec()
+  // Allow updates to the original user
+  if (duplicate && duplicate?._id.toString() !== _id) {
+    return res.status(409).json({ ok: false, message: 'Usuario ya Registrado' })
+  }
+
+  usuario.nombres = nombres
+  usuario.apellidos = apellidos
+  usuario.email = email
+  usuario.documento = documento
+  usuario.estaActivo = estaActivo
+  usuario.picturePath = picturePath
+  usuario.cargo = cargo
+  usuario.rol = rol
+
+  const usuarioActualizado = await usuario.save()
+  res.status(200).json({
+    ok: true,
+    message: `Se Actualizo el Usuario ${usuarioActualizado.nombres} ${usuarioActualizado.apellidos}`,
+    usuarioActualizado
+  })
 })

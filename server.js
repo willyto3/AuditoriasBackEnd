@@ -1,5 +1,4 @@
 //? IMPORTACION DE DEPENDENCIAS
-
 // Importación de Express
 import express from 'express'
 // Importación de Body Parser
@@ -20,7 +19,6 @@ import path from 'path'
 import colors from 'colors'
 
 //? IMPORTACIÓN DE MODULOS
-
 // Importación de fileDirName
 import fileDirName from './configuracion/file-dir-name.js'
 // Importacion del logger y logevents
@@ -74,7 +72,19 @@ app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }))
 // Codigo para usar Cors
 app.use(cors(opcionesCors))
 // Codigo para usar Morgan
-app.use(morgan('common'))
+app.use(
+  morgan(function (tokens, req, res) {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, 'content-length'),
+      '-',
+      tokens['response-time'](req, res),
+      'ms'
+    ].join(' ')
+  })
+)
 // Codigo para usar BodyParser
 app.use(bodyParser.json({ limit: '30mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
@@ -86,7 +96,6 @@ app.use('/images', express.static(path.join(__dirname, 'public/assets')))
 app.use(`${api}/`, raizRutas)
 
 //Rutas
-
 app.use(`${api}/usuarios`, usuarioRutas)
 // app.use(`${api}/auth`, authRoutes)
 // app.use(`${api}/equipos`, equipoRoutes)
@@ -107,14 +116,16 @@ app.all('*', (req, res) => {
 // Codigo para poder usar el metodo errorHandler
 app.use(ManejadorErrores)
 
+// Imprimimos en Consola nuestro nivel de ejecución
+console.log(process.env.NODE_ENV.rainbow)
+
 //? CONEXIÓN A LA BASE DE DATOS
 // Conexión a la Base de Datos
 mongoose.connection.once('open', () => {
   app.listen(PORT, () =>
     console.log(
-      colors.cyan(
-        `Nos Encontramos en el ${process.env.NODE_ENV} - Conectado a MongoDB - Server Corriendo en el puerto ${PORT}`
-      )
+      `Nos Encontramos en el ${process.env.NODE_ENV} - Conectado a MongoDB - Server Corriendo en el puerto ${PORT}`
+        .bgBrightGreen
     )
   )
 })
