@@ -74,7 +74,6 @@ export const obtenerUnUsuario = asyncHandler(async (req, res) => {
     return res.status(400).json({ ok: false, message: 'Usuario no encontrado' })
   }
   // Respuesta del usuario encontrado
-  console.log(usuario)
   res.json(usuario)
 })
 
