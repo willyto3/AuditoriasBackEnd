@@ -7,7 +7,7 @@ import asyncHandler from 'express-async-handler'
 export const verificarToken = asyncHandler(async (req, res, next) => {
   let token = req.header('Authorization')
   // const token = req.header('x-auth-token')
-
+  console.log(token)
   if (!token) {
     return res.status(401).json({
       ok: false,

@@ -32,13 +32,12 @@ import { ManejadorErrores } from './app/middleware/manejadorErrores.js'
 import { opcionesCors } from './configuracion/opcionesCors.js'
 // Importacion de la conexion a la base de datos
 import { conexionBD } from './configuracion/conexionBD.js'
-// // Importación de Verificación de Token
-// import { verifyToken } from './app/middleware/auth.js'
+
 
 //? IMPORTACIÓN DE RUTAS
 import raizRutas from './app/rutas/raiz.js'
 import usuarioRutas from './app/rutas/usuarios.js'
-// import authRoutes from './app/routes/auth.js'
+import clientRoutes from './app/rutas/clients.js'
 
 // import equipoRoutes from './app/routes/equipos.js'
 
@@ -97,7 +96,7 @@ app.use(`${api}/`, raizRutas)
 
 //Rutas
 app.use(`${api}/usuarios`, usuarioRutas)
-// app.use(`${api}/auth`, authRoutes)
+app.use(`${api}/clients`, clientRoutes)
 // app.use(`${api}/equipos`, equipoRoutes)
 
 // Ruta 404
