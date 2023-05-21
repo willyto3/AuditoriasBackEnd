@@ -12,6 +12,7 @@ import {
   eliminarUsuario,
   getAllClients,
   createClient,
+  getAClient,
   actualizarUsuario
 } from '../controladores/clients.js'
 
@@ -21,7 +22,7 @@ const router = express.Router()
 // Se utilizan las Rutas
 // Rutas de Lectura
 router.get('/', getAllClients)
-// router.get('/:id', getAClient)
+router.get('/:id', getAClient)
 
 // // Rutas de Eliminación
 // router.delete('/:id', deleteClient)

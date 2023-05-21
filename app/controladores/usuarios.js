@@ -15,12 +15,11 @@ import Usuario from '../modelos/Usuario.js'
 // @route Get /usuarios
 // @Acceso Privado
 export const obtenerTodosLosUsuarios = asyncHandler(async (req, res) => {
-
   // Se añade poder enviar por req.query, metodos para filtar resultados y ordenar resultados
   const { nombres, sort, select } = req.query
   const queryObject = {}
 
-    // Busqueda por Nombres
+  // Busqueda por Nombres
   if (nombres) {
     queryObject.nombres = nombres
   }
@@ -155,15 +154,15 @@ export const registroUsuario = asyncHandler(async (req, res) => {
     })
   }
 
-    // Se verifica que no haya un usuario con ese documento
-    const busquedaDocumento = await Usuario.findOne({ documento })
+  // Se verifica que no haya un usuario con ese documento
+  const busquedaDocumento = await Usuario.findOne({ documento })
 
-    if (busquedaDocumento) {
-      return res.status(400).json({
-        ok: false,
-        mensaje: 'El Documento ya se encuentra Registrado'
-      })
-    }
+  if (busquedaDocumento) {
+    return res.status(400).json({
+      ok: false,
+      mensaje: 'El Documento ya se encuentra Registrado'
+    })
+  }
 
   // Se realiza la proteccion del password
   const salt = bcryptjs.genSaltSync(12)
@@ -272,6 +271,13 @@ export const actualizarUsuario = asyncHandler(async (req, res) => {
   const duplicate = await Usuario.findOne({ documento }).lean().exec()
   // Allow updates to the original user
   if (duplicate && duplicate?._id.toString() !== _id) {
+    return res.status(409).json({ ok: false, message: 'Usuario ya Registrado' })
+  }
+
+  //Check for duplicate
+  const duplicateEmail = await Usuario.findOne({ email }).lean().exec()
+  // Allow updates to the original user
+  if (duplicateEmail && duplicate?._id.toString() !== _id) {
     return res.status(409).json({ ok: false, message: 'Usuario ya Registrado' })
   }
 

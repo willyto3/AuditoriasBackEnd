@@ -55,23 +55,23 @@ export const getAllClients = asyncHandler(async (req, res) => {
   res.json(clients)
 })
 
-// //? OBTENER UN USUARIO
-// // @Descripcion obtener un usuario
-// // @route Get /usuarios:id
-// // @Acceso Privado
-// export const obtenerUnUsuario = asyncHandler(async (req, res) => {
-//   // Se extrae el id de los parametros
-//   const { id: _id } = req.params
+//? OBTENER UN CLIENTE
+// @Descripcion obtener un cliente
+// @route Get /cliente:id
+// @Acceso Privado
+export const getAClient = asyncHandler(async (req, res) => {
+  // Se extrae el id de los parametros
+  const { id: _id } = req.params
 
-//   // Se realiza la busqueda del id en User
-//   const usuario = await Usuario.findById(_id)
-//   // Si el usuario esta vacio, muestra un mensaje de error
-//   if (!usuario) {
-//     return res.status(400).json({ ok: false, message: 'Usuario no encontrado' })
-//   }
-//   // Respuesta del usuario encontrado
-//   res.json(usuario)
-// })
+  // Se realiza la busqueda del id en Client
+  const client = await Client.findById(_id)
+  // Si el cliente esta vacio, muestra un mensaje de error
+  if (!client) {
+    return res.status(400).json({ ok: false, message: 'Cliente no encontrado' })
+  }
+  // Respuesta del usuario encontrado
+  res.json(client)
+})
 
 //? REGISTRAR CLIENTE
 // @Descripción Crear un nuevo Cliente
