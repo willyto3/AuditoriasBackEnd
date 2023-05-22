@@ -58,7 +58,7 @@ export const obtenerTodosLosUsuarios = asyncHandler(async (req, res) => {
   res.json(usuarios)
 })
 
-// OBTENER UN USUARIO
+//? OBTENER UN USUARIO
 // @Descripcion obtener un usuario
 // @route Get /usuarios:id
 // @Acceso Privado

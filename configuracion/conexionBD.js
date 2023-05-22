@@ -10,6 +10,6 @@ export const conexionBD = async () => {
     })
     // Captura de Errores
   } catch (err) {
-    console.log(err)
+    console.log(err.red)
   }
 }

@@ -1,30 +1,38 @@
-//? IMPORTACION DE DEPENDENCIAS
-
+//? IMPORTACION DE PAQUETES
 // Importación de Mongoose
 import mongoose from 'mongoose'
 
 // Se crea el Esquema para el Usuario
 const UsuarioEsquema = new mongoose.Schema(
   {
-    nombres: { type: String, required: true, min: 2, max: 50 },
-    apellidos: { type: String, required: true, min: 2, max: 50 },
-
+    nombres: {
+      type: String,
+      required: [true, 'Los Nombres son Requeridos'],
+      min: 2,
+      max: 50
+    },
+    apellidos: {
+      type: String,
+      required: [true, 'Los Apellidos son Requeridos'],
+      min: 2,
+      max: 50
+    },
     documento: {
       type: String,
-      required: true,
+      required: [true, 'El Documento es Requerido'],
       min: 2,
       max: 50,
       unique: true
     },
     email: {
       type: String,
-      required: true,
+      required: [true, 'El Email Es Requerido'],
       max: 50,
       unique: true
     },
     contrasena: {
       type: String,
-      required: true,
+      required: [true, 'La Constraseña es Requerida'],
       min: 5
     },
     cargo: {
@@ -38,7 +46,7 @@ const UsuarioEsquema = new mongoose.Schema(
     },
     rol: {
       type: String,
-      enum: [ 'Usuario','Admin', 'Super Admin'],
+      enum: ['Usuario', 'Admin', 'Super Admin'],
       default: 'Usuario'
     },
     estaActivo: {
