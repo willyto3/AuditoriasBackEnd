@@ -1,4 +1,4 @@
-//? IMPORTACION DE DEPENDENCIAS
+//? IMPORTACION DE PAQUETES
 // Importación de Express
 import express from 'express'
 // Importación de Body Parser
@@ -88,7 +88,7 @@ app.use(
 app.use(bodyParser.json({ limit: '30mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
 // Codigo para usar la carpeta publica de los archivos estaticos assets
-app.use('/images', express.static(path.join(__dirname, 'public/assets')))
+app.use('/images', express.static(path.join(__dirname, 'public')))
 
 //? RUTAS
 // Ruta Principal

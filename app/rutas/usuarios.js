@@ -1,4 +1,4 @@
-//? IMPORTACION DE DEPENDENCIAS
+//? IMPORTACION DE PAQUETES
 // Importación de Express
 import express from 'express'
 
