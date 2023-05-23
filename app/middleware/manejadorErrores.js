@@ -5,6 +5,8 @@ import colors from 'colors'
 // Importacion de registroEventos
 import { registroEventos } from './registroEventos.js'
 
+import { constants } from '../../configuracion/constants.js'
+
 // Funcion para crear y guardar un Error
 export const ManejadorErrores = (err, req, res, next) => {
   registroEventos(
@@ -13,9 +15,44 @@ export const ManejadorErrores = (err, req, res, next) => {
   )
   console.log(colors.red(err.stack))
 
-  const status = res.statusCode ? res.statusCode : 500
+  const statusCode = res.statusCode ? res.statusCode : 500
 
-  res.status(status)
+  switch (statusCode) {
+    case constants.VALIDATION_ERROR:
+      res.json({
+        title: 'Validation Failed',
+        message: err.message,
+        stackTrace: err.stack
+      })
+      break
+    case constants.NOT_FOUND:
+      res.json({
+        title: 'Not Found',
+        message: err.message,
+        stackTrace: err.stack
+      })
+    case constants.UNATHORIZED:
+      res.json({
+        title: 'Unauthorized',
+        message: err.message,
+        stackTrace: err.stack
+      })
+    case constants.FORBIDDEN:
+      res.json({
+        title: 'Forbidden',
+        message: err.message,
+        stackTrace: err.stack
+      })
+    case constants.SERVER_ERROR:
+      res.json({
+        title: 'Server Error',
+        message: err.message,
+        stackTrace: err.stack
+      })
+    default:
+      console.log('No Error')
+      break
+  }
 
-  res.json({ message: err.message })
+  res.status(statusCode)
 }
