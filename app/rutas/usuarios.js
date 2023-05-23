@@ -25,19 +25,21 @@ import {
 const router = express.Router()
 
 // Se utilizan las Rutas
+
+// Rutas de Escritura
+router.post('/ingresousuario', ingresoUsuario)
+
+// Rutas Protegidas
+router.use(verificarToken)
 // Rutas de Lectura
 router.get('/', obtenerTodosLosUsuarios)
-// router.get('/', verificarToken, obtenerTodosLosUsuarios)
-router.get('/:id', obtenerUnUsuario)
-// router.get('/:id', verificarToken,obtenerUnUsuario)
+router.get('/:id',  obtenerUnUsuario)
 
 // Rutas de Eliminación
 router.delete('/:id', eliminarUsuario)
 
 // Rutas de Escritura
 router.post('/', upload.single('picture'), registroUsuario)
-
-router.post('/ingresousuario', ingresoUsuario)
 
 // Rutas de Actualización
 router.patch('/:id', actualizarUsuario)

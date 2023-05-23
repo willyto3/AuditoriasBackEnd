@@ -1,13 +1,13 @@
 //? IMPORTACION DE DEPENDENCIAS
 // Se importa Check de Express-Validator
-import { check } from 'express-validator';
+import { check } from 'express-validator'
 
 // Se importa el archivo Validacion de Errores
-import { validacionErrores } from '../middleware/validacionErrores.js';
+import { validacionErrores } from '../middleware/validacionErrores.js'
 
 //? IMPORTACION DE MODELOS
 // Importacón del Modelo Usuario
-import Usuario from '../modelos/Usuario.js';
+import Usuario from '../modelos/Usuario.js'
 
 // Funcion para realizar las verificaciones al crear un usuario
 export const validarRegistro = [
@@ -25,9 +25,9 @@ export const validarRegistro = [
     .isEmail()
     // Que no este duplicado el email en la base de datos
     .custom(async (value) => {
-      const usuario = await Usuario.findOne({ email: value }).lean().exec();
+      const usuario = await Usuario.findOne({ email: value }).lean().exec()
       if (usuario) {
-        return Promise.reject('Email ya esta registrado');
+        return Promise.reject('Email ya esta registrado')
       }
     }),
   // DOCUMENTO
@@ -37,9 +37,9 @@ export const validarRegistro = [
     .notEmpty()
     // Que no este duplicado el email en la base de datos
     .custom(async (value) => {
-      const usuario = await Usuario.findOne({ documento: value }).lean().exec();
+      const usuario = await Usuario.findOne({ documento: value }).lean().exec()
       if (usuario) {
-        return Promise.reject('Documento ya esta registrado');
+        return Promise.reject('Documento ya esta registrado')
       }
     }),
   //NOMBRES
@@ -58,6 +58,6 @@ export const validarRegistro = [
     .withMessage('Los Apellidos no puede ser menor a 2 caracteres'),
 
   (req, res, next) => {
-    validacionErrores(req, res, next);
+    validacionErrores(req, res, next)
   }
-];
+]
