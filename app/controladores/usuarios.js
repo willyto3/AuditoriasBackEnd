@@ -1,8 +1,6 @@
 //? IMPORTACION DE DEPENDENCIAS
 // Se importa BcryptJS
 import bcryptjs from 'bcryptjs'
-// Se importa JSONWebToken
-import jwt from 'jsonwebtoken'
 // Se importa Express-Async-Handler
 import asyncHandler from 'express-async-handler'
 
@@ -74,58 +72,6 @@ export const obtenerUnUsuario = asyncHandler(async (req, res) => {
   }
   // Respuesta del usuario encontrado
   res.json(usuario)
-})
-
-//? INGRESO USUARIO
-// @Descripción Hacer Login en la APP
-// @route Post usuarios/ingresousuario
-// @Acceso Publico
-export const ingresoUsuario = asyncHandler(async (req, res) => {
-  // Se solicitan los datos de la pagina
-  const { email, contrasena } = req.body
-
-  // Se busca el usuario en la Base de datos
-  const usuario = await Usuario.findOne({ email })
-
-  if (!usuario) {
-    return res.status(400).json({
-      ok: false,
-      mensaje: 'El Email o la Contraseña no estan Registrados'
-    })
-  }
-
-  // Se compara la contraseña ingresada con la contraseña en la base de datos
-  const compararContrasena = await bcryptjs.compareSync(
-    contrasena,
-    usuario.contrasena
-  )
-
-  if (!compararContrasena) {
-    return res.status(400).json({
-      ok: false,
-      mensaje: 'El Email o la Contraseña no estan Registrados'
-    })
-  }
-
-  const payload = {
-    id: usuario._id
-  }
-
-  const token = jwt.sign(
-    payload,
-    process.env.JWT_SECRET_KEY,
-    { expiresIn: 360000 },
-    (error, token) => {
-      if (error) res.json({ error })
-
-      res.json({
-        ok: true,
-        mensaje: `Se Inicio la Sesión del Usuario ${usuario.nombres}`,
-        usuario,
-        token
-      })
-    }
-  )
 })
 
 //? REGISTRAR USUARIO

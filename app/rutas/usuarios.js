@@ -14,7 +14,6 @@ import { validarRegistro } from '../validaciones/usuarios.js'
 // Se importa el controlador del usuario
 import {
   eliminarUsuario,
-  ingresoUsuario,
   obtenerTodosLosUsuarios,
   obtenerUnUsuario,
   registroUsuario,
@@ -26,14 +25,11 @@ const router = express.Router()
 
 // Se utilizan las Rutas
 
-// Rutas de Escritura
-router.post('/ingresousuario', ingresoUsuario)
-
 // Rutas Protegidas
 router.use(verificarToken)
 // Rutas de Lectura
 router.get('/', obtenerTodosLosUsuarios)
-router.get('/:id',  obtenerUnUsuario)
+router.get('/:id', obtenerUnUsuario)
 
 // Rutas de Eliminación
 router.delete('/:id', eliminarUsuario)

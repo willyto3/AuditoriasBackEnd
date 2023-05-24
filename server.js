@@ -17,6 +17,8 @@ import morgan from 'morgan'
 import path from 'path'
 // Importación de Colors
 import colors from 'colors'
+// Importacion de Cookie Parser
+import cookieParser from 'cookie-parser'
 
 //? IMPORTACIÓN DE MODULOS
 // Importación de fileDirName
@@ -33,13 +35,11 @@ import { opcionesCors } from './configuracion/opcionesCors.js'
 // Importacion de la conexion a la base de datos
 import { conexionBD } from './configuracion/conexionBD.js'
 
-
 //? IMPORTACIÓN DE RUTAS
 import raizRutas from './app/rutas/raiz.js'
 import usuarioRutas from './app/rutas/usuarios.js'
 import clientRoutes from './app/rutas/clients.js'
-
-// import equipoRoutes from './app/routes/equipos.js'
+import authRoutes from './app/rutas/auth.js'
 
 //? CONFIGURACIONES
 
@@ -68,6 +68,8 @@ app.use(express.json())
 // Codigo para poder usar Helmet
 app.use(helmet())
 app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }))
+// Codigo para poder recibir Cookies
+app.use(cookieParser())
 // Codigo para usar Cors
 app.use(cors(opcionesCors))
 // Codigo para usar Morgan
@@ -97,7 +99,7 @@ app.use(`${api}/`, raizRutas)
 //Rutas
 app.use(`${api}/usuarios`, usuarioRutas)
 app.use(`${api}/clients`, clientRoutes)
-// app.use(`${api}/equipos`, equipoRoutes)
+app.use(`${api}/auth`, authRoutes)
 
 // Ruta 404
 app.all('*', (req, res) => {

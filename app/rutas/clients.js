@@ -5,6 +5,8 @@ import express from 'express'
 // //? IMPORTACIÓN DE MODULOS
 // Importacion del modulo para subir archivos
 import { upload } from '../middleware/manejadorArchivos.js'
+// Importación de Verificación de Token
+import { verificarToken } from '../middleware/verificarToken.js'
 
 //? IMPORTACION DEL CONTROLADOR
 // Se importa el controlador del cliente
@@ -19,6 +21,8 @@ import {
 // Se declara el router
 const router = express.Router()
 
+// Rutas Protegidas
+router.use(verificarToken)
 // Se utilizan las Rutas
 // Rutas de Lectura
 router.get('/', getAllClients)

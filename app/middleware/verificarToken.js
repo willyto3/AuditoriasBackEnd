@@ -5,32 +5,24 @@ import jwt from 'jsonwebtoken'
 import asyncHandler from 'express-async-handler'
 
 export const verificarToken = asyncHandler(async (req, res, next) => {
-  let token = req.header.Authorization || req.header.authorization
+  const authHeader = req.headers.Authorization || req.headers.authorization
 
-  console.log(token)
-
-  if (!token) {
+  if (!authHeader?.startsWith('Bearer ')) {
     return res.status(401).json({
       ok: false,
       msg: 'Token no Valido'
     })
   }
 
-  if (token.startsWith('Bearer ')) {
-    token = token.split(' ')[1]
-  }
+  const token = authHeader.split(' ')[1]
 
-  const verificado = jwt.verify(
-    token,
-    process.env.JWT_SECRET_KEY,
-    (err, decoded) => {
-      if (err) {
-        res.status(401)
-        throw new Error('Usuario no se encuentra Autorizado')
-      }
-      console.log(decoded)
+  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+    if (err) {
+      res.status(401)
+      throw new Error('Usuario no se encuentra Autorizado')
     }
-  )
-  req.usuario = verificado
-  next()
+    req.usuario = decoded.UserInfo.email
+    req.rol = decoded.UserInfo.rol
+    next()
+  })
 })
